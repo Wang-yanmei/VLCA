@@ -7,7 +7,7 @@ This repo provides code of three key modules for the  paper "Vision and Language
 
 ## Three key modules
 
-# =================inter-class relationship loss based on word-vec=====================================================
+# inter-class relationship loss based on word-vec
             batch_size = len(label)
             num_classes = len(label_list)
             batch_inter_class_probability = np.zeros((batch_size, num_classes))
@@ -18,7 +18,7 @@ This repo provides code of three key modules for the  paper "Vision and Language
             p_scores = F.softmax(scores, dim=1).float()
             loss_interclass = kl_divergence(batch_inter_class_probability_tensor, p_scores)
 
-# =================domain decouple loss based on CLIP====================================================
+# domain decouple loss based on CLIP
             feature_text_doamin_ = self.model_clip.encode_text(text_domain.to(device))
             feature_text_doamin = feature_text_doamin_ / feature_text_doamin_.norm(dim=-1, keepdim=True)
             feature_text_class_ = self.model_clip.encode_text(text_class.to(device))  
@@ -27,7 +27,7 @@ This repo provides code of three key modules for the  paper "Vision and Language
             orthogonal_supervision = torch.abs(
                 torch.nn.functional.cosine_similarity(features, feature_text_doamin, dim=1))
             loss_clip = 1 - cosine_similarity.mean() + orthogonal_supervision.mean()
-# =================intraclass  loss based on lowrank decompose====================================================
+# intraclass  loss based on lowrank decompose
             for l in unique_labels:
                 class_features = features[label == l]
                 reconstructed_matrix, k = svd_reconstruction(class_features, 0.5)
